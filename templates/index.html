@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Link Tracker</title>
+</head>
+<body>
+    <h1>Link Tracker</h1>
+    <form method="POST">
+        <label for="url">URL to track:</label>
+        <input type="url" name="url" required>
+        <button type="submit">Add URL</button>
+    </form>
+    <hr>
+    <h2>Tracked URLs</h2>
+    <ul>
+        {% for url, data in tracked_links.items() %}
+        <li>
+            <a href="{{ url }}" target="_blank">{{ url }}</a> {% if data.changed %}(Changed!){% endif %}
+            <a href="{{ url_for('delete', url=url) }}">(Delete)</a>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
+
