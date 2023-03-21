@@ -30,18 +30,24 @@ def check_link_changes(url):
     try:
         r = requests.get(url)
         r.raise_for_status()
-        content = BeautifulSoup(r.text, "html.parser").find_all()
-        for line in content:
-            if 'cena' in line.text.lower():
-                if 'pln' or 'zł' in line.text.lower():
-                    if 'podobne' or 'powiązane' or 'dla ciebie' not in line.text.lower():
-                        content = line.text
-                        break
+        if 'answear.com' in url:
+            content = check_answear_com(r)
+        elif 'leecooper' in url:
+            content = check_leecooper(r)
+
         return content
 
     except Exception as e:
         print(f"Error checking link {url}: {e}")
         return None
+
+def check_answear_com(source):
+    content = BeautifulSoup(source.content, "html.parser")
+    return content.find('div', {'class': 'ProductCard__priceWrapper__Tyf2d'}).text
+
+def check_leecooper(source):
+    content = BeautifulSoup(source.content, "html.parser")
+    return content.find('div', {'class': 'product_info'}).text
 
 
 def track_links():
@@ -49,12 +55,12 @@ def track_links():
         for url, data in tracked_links.items():
             content = check_link_changes(url)
             if content and content != data["content"]:
+                send_email(url, email_sender, password_sender, content, data["content"])
                 data["content"] = content
                 data["changed"] = True
-                send_email(url, email_sender, password_sender)
                 print(f"Link {url} content has changed!")
                 save_data(tracked_links)
-        time.sleep(15)
+        time.sleep(60)
 
 
 
@@ -75,15 +81,16 @@ def delete(url):
         del tracked_links[url]
     return redirect(url_for("index"))
 
-def send_email(url, email_sender, password_sender, subject='Link się zmienił!', body='Jakiś link się zmienił', to_email=email_sender):
-   from_email = email_sender
+def send_email(url, email_sender, password_sender, old_content, new_content, subject='Link się zmienił!', body='Jakiś link się zmienił'):
+   email = email_sender
    password = password_sender
+   body = body + f'Poprzednie wartosci: \n' + old_content + f'\nNowe wartości: \n' + new_content
 
 
    msg = f'Subject: {subject}\n\n{body}\n{url}'.encode('UTF-8')
    server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-   server.login(from_email, password)
-   server.sendmail(from_email, to_email, msg)
+   server.login(email, password)
+   server.sendmail(email, email, msg)
    server.quit()
 
 
