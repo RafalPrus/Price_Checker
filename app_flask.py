@@ -34,6 +34,8 @@ def check_link_changes(url):
             content = check_answear_com(r)
         elif 'leecooper' in url:
             content = check_leecooper(r)
+        elif 'ewozki.eu' in url:
+            content = check_ewozki(r)
 
         return content
 
@@ -49,6 +51,10 @@ def check_leecooper(source):
     content = BeautifulSoup(source.content, "html.parser")
     return content.find('div', {'class': 'product_info'}).text
 
+def check_ewozki(source):
+    content = BeautifulSoup(source.content, "html.parser")
+    return content.find('div', {'class': 'price-available'}).text
+
 
 def track_links():
     while True:
@@ -60,7 +66,7 @@ def track_links():
                 data["changed"] = True
                 print(f"Link {url} content has changed!")
                 save_data(tracked_links)
-        time.sleep(60)
+        time.sleep(600)
 
 
 
@@ -98,4 +104,4 @@ def send_email(url, email_sender, password_sender, old_content, new_content, sub
 if __name__ == "__main__":
     tracking_thread = threading.Thread(target=track_links, daemon=True)
     tracking_thread.start()
-    app.run(debug=True)
+    app.run(debug=True, host='0.0.0.0')
