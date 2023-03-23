@@ -7,6 +7,9 @@ from config import email_sender, password_sender
 import smtplib
 import json
 import os
+import cloudscraper
+
+
 
 DATA_FILE = "data/tracked_links.json"
 
@@ -28,14 +31,20 @@ tracked_links = load_data()
 
 def check_link_changes(url):
     try:
-        r = requests.get(url)
-        r.raise_for_status()
+        if 'wrangler.com' in url:
+            r = scrap_wrangler(url)
+            r.raise_for_status()
+        else:
+            r = requests.get(url)
+            r.raise_for_status()
         if 'answear.com' in url:
             content = check_answear_com(r)
         elif 'leecooper' in url:
             content = check_leecooper(r)
         elif 'ewozki.eu' in url:
             content = check_ewozki(r)
+        elif 'wrangler.com' in url:
+            content = check_wrangler(r)
 
         return content
 
@@ -55,16 +64,36 @@ def check_ewozki(source):
     content = BeautifulSoup(source.content, "html.parser")
     return content.find('div', {'class': 'price-available'}).text
 
+def check_wrangler(source):
+    content = BeautifulSoup(source.content, "html.parser")
+    return content.find('div', {'class': 'pdp-detail'}).text
+
+def check_rolbud(source):
+    content = BeautifulSoup(source.content, "html.parser")
+    return content.find('div', {'class': 'product-desc single_product'}).text
+
+def scrap_wrangler(url):
+    scraper = cloudscraper.create_scraper(
+        browser={
+            'browser': 'chrome',
+            'platform': 'windows',
+            'desktop': True
+        }
+    )
+    return scraper.get(url)
+
 
 def track_links():
     while True:
-        for url, data in tracked_links.items():
+        iteration = tracked_links.copy().items()
+        for url, data in iteration:
             content = check_link_changes(url)
             if content and content != data["content"]:
                 send_email(url, email_sender, password_sender, content, data["content"])
                 data["content"] = content
                 data["changed"] = True
                 print(f"Link {url} content has changed!")
+                tracked_links[url]['content'] = content
                 save_data(tracked_links)
         time.sleep(600)
 
@@ -88,16 +117,16 @@ def delete(url):
     return redirect(url_for("index"))
 
 def send_email(url, email_sender, password_sender, old_content, new_content, subject='Link się zmienił!', body='Jakiś link się zmienił'):
-   email = email_sender
-   password = password_sender
-   body = body + f'Poprzednie wartosci: \n' + old_content + f'\nNowe wartości: \n' + new_content
+    print('----------------1  w email! --------------------')
+    email = email_sender
+    password = password_sender
+    body = body + f'Poprzednie wartosci: \n' + old_content + f'\nNowe wartości: \n' + new_content
+    msg = f'Subject: {subject}\n\n{body}\n{url}'.encode('UTF-8')
+    server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
+    server.login(email, password)
+    server.sendmail(email, email, msg)
+    server.quit()
 
-
-   msg = f'Subject: {subject}\n\n{body}\n{url}'.encode('UTF-8')
-   server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
-   server.login(email, password)
-   server.sendmail(email, email, msg)
-   server.quit()
 
 
 
