@@ -69,9 +69,6 @@ def check_wrangler(source):
     content = BeautifulSoup(source.content, "html.parser")
     return content.find('div', {'class': 'pdp-detail'}).text
 
-def check_rolbud(source):
-    content = BeautifulSoup(source.content, "html.parser")
-    return content.find('div', {'class': 'product-desc single_product'}).text
 
 def scrap_wrangler(url):
     scraper = cloudscraper.create_scraper(
@@ -102,7 +99,7 @@ def track_links():
             else:
                 data['counter'] = 1
             save_data(iteration)
-        time.sleep(10)
+        time.sleep(600)
 
 
 
@@ -121,8 +118,10 @@ def index():
 
 @app.route("/delete/<path:url>")
 def delete(url):
+    tracked_links = load_data()
     if url in tracked_links:
         del tracked_links[url]
+        save_data(tracked_links)
     return redirect(url_for("index"))
 
 def send_email(url, email_sender, password_sender, old_content, new_content, subject='Link się zmienił!', body='Jakiś link się zmienił'):
