@@ -19,6 +19,9 @@
         <li>
             <a href="{{ url }}" target="_blank">{{ url }}</a> {% if data.changed %}(Changed!){% endif %}
             <a href="{{ url_for('delete', url=url) }}">(Delete)</a>
+            <ul>Added: {{ data.check_date }}</ul>
+            <ul>Last check: {% if data.last_check_date %}{{data.last_check_date}}{% endif %}</ul>
+            <ul>Checked times: {% if data.counter %}{{data.counter}}{% endif %}</ul>
         </li>
         {% endfor %}
     </ul>

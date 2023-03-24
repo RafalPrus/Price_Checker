@@ -1,4 +1,5 @@
 import time
+from datetime import datetime
 import threading
 from bs4 import BeautifulSoup
 import requests
@@ -8,7 +9,6 @@ import smtplib
 import json
 import os
 import cloudscraper
-
 
 
 DATA_FILE = "data/tracked_links.json"
@@ -22,6 +22,7 @@ def load_data():
 def save_data(data):
     with open(DATA_FILE, "w") as f:
         json.dump(data, f)
+
 
 
 app = Flask(__name__)
@@ -85,17 +86,23 @@ def scrap_wrangler(url):
 
 def track_links():
     while True:
-        iteration = tracked_links.copy().items()
-        for url, data in iteration:
+        iteration = load_data().copy()
+        for url, data in iteration.items():
             content = check_link_changes(url)
             if content and content != data["content"]:
                 send_email(url, email_sender, password_sender, content, data["content"])
                 data["content"] = content
                 data["changed"] = True
                 print(f"Link {url} content has changed!")
-                tracked_links[url]['content'] = content
-                save_data(tracked_links)
-        time.sleep(600)
+                iteration[url] = data
+            data['last_check_date'] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+            if 'counter' in data:
+                new_data = data['counter'] + 1
+                data['counter'] = new_data
+            else:
+                data['counter'] = 1
+            save_data(iteration)
+        time.sleep(10)
 
 
 
@@ -104,9 +111,11 @@ def index():
     if request.method == "POST":
         url = request.form.get("url")
         if url:
-            tracked_links[url] = {"content": check_link_changes(url), "changed": False}
+            tracked_links = load_data()
+            tracked_links[url] = {"content": check_link_changes(url), "changed": False, 'check_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
             save_data(tracked_links)
             return redirect(url_for("index"))
+    tracked_links = load_data()
     return render_template("index.html", tracked_links=tracked_links)
 
 
