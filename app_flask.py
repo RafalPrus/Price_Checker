@@ -33,19 +33,19 @@ tracked_links = load_data()
 def check_link_changes(url):
     try:
         if 'wrangler.com' in url:
-            r = scrap_wrangler(url)
+            r = Checker.scrap_wrangler(url)
             r.raise_for_status()
         else:
             r = requests.get(url)
             r.raise_for_status()
         if 'answear.com' in url:
-            content = check_answear_com(r)
+            content = Checker.check_answear_com(r)
         elif 'leecooper' in url:
-            content = check_leecooper(r)
+            content = Checker.check_leecooper(r)
         elif 'ewozki.eu' in url:
-            content = check_ewozki(r)
+            content = Checker.check_ewozki(r)
         elif 'wrangler.com' in url:
-            content = check_wrangler(r)
+            content = Checker.check_wrangler(r)
 
         return content
 
@@ -53,32 +53,38 @@ def check_link_changes(url):
         print(f"Error checking link {url}: {e}")
         return None
 
-def check_answear_com(source):
-    content = BeautifulSoup(source.content, "html.parser")
-    return content.find('div', {'class': 'ProductCard__priceWrapper__Tyf2d'}).text
+class Checker:
 
-def check_leecooper(source):
-    content = BeautifulSoup(source.content, "html.parser")
-    return content.find('div', {'class': 'product_info'}).text
+    @staticmethod
+    def check_answear_com(source):
+        content = BeautifulSoup(source.content, "html.parser")
+        return content.find('div', {'class': 'ProductCard__priceWrapper__Tyf2d'}).text
 
-def check_ewozki(source):
-    content = BeautifulSoup(source.content, "html.parser")
-    return content.find('div', {'class': 'price-available'}).text
+    @staticmethod
+    def check_leecooper(source):
+        content = BeautifulSoup(source.content, "html.parser")
+        return content.find('div', {'class': 'product_info'}).text
 
-def check_wrangler(source):
-    content = BeautifulSoup(source.content, "html.parser")
-    return content.find('div', {'class': 'pdp-detail'}).text
+    @staticmethod
+    def check_ewozki(source):
+        content = BeautifulSoup(source.content, "html.parser")
+        return content.find('div', {'class': 'price-available'}).text
 
+    @staticmethod
+    def check_wrangler(source):
+        content = BeautifulSoup(source.content, "html.parser")
+        return content.find('div', {'class': 'pdp-detail'}).text
 
-def scrap_wrangler(url):
-    scraper = cloudscraper.create_scraper(
-        browser={
-            'browser': 'chrome',
-            'platform': 'windows',
-            'desktop': True
-        }
-    )
-    return scraper.get(url)
+    @staticmethod
+    def scrap_wrangler(url):
+        scraper = cloudscraper.create_scraper(
+            browser={
+                'browser': 'chrome',
+                'platform': 'windows',
+                'desktop': True
+            }
+        )
+        return scraper.get(url)
 
 
 def track_links():
