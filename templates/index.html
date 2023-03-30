@@ -18,7 +18,20 @@
         {% for url, data in tracked_links.items() %}
         <li>
             <a href="{{ url }}" target="_blank">{{ url }}</a> {% if data.changed %}(Changed!){% endif %}
-            <a href="{{ url_for('delete', url=url) }}">(Delete)</a>
+            <a href="{{ url_for('delete', url=url) }}">
+                <button style="
+                    font-size: 16px;
+                    font-weight: bold;
+                    color: white;
+                    background-color: blue;
+                    border: none;
+                    padding: 10px 20px;
+                    cursor: pointer;
+                    border-radius: 5px;
+                    text-decoration: none;
+                ">
+                    Delete
+                </button></a>
             <ul>Added: {{ data.check_date }}</ul>
             <ul>Last check: {% if data.last_check_date %}{{data.last_check_date}}{% endif %}</ul>
             <ul>Checked times: {% if data.counter %}{{data.counter}}{% endif %}</ul>
