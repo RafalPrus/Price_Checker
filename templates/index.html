@@ -62,6 +62,7 @@
                 <a href="{{ url }}" target="_blank">{{ url }}</a>
                 <ul>Added: {{ data.check_date }}</ul>
                 <ul>Last check: {% if data.last_check_date %}{{data.last_check_date}}{% endif %}</ul>
+                <ul>Last price: {% if data.content %}{{data.content}}{% endif %}</ul>
                 <ul>Checked times: {% if data.counter %}{{data.counter}}{% endif %}</ul>
             </div>
             <div>

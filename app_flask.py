@@ -21,6 +21,7 @@ def load_data():
 
 def save_data(data):
     with open(DATA_FILE, "w") as f:
+        data = {key: value for key, value in sorted(data.items())}
         json.dump(data, f)
 
 
@@ -63,7 +64,7 @@ class Checker:
     @staticmethod
     def check_leecooper(source):
         content = BeautifulSoup(source.content, "html.parser")
-        return ' '.join(content.find('div', {'class': 'product_info'}).text.split())
+        return ' '.join(content.find('div', {'class': 'projector_price_subwrapper'}).text.split())
 
     @staticmethod
     def check_ewozki(source):
@@ -105,7 +106,7 @@ def track_links():
             else:
                 data['counter'] = 1
             save_data(iteration)
-        time.sleep(600)
+        time.sleep(1200)
 
 
 
@@ -134,7 +135,7 @@ def send_email(url, email_sender, password_sender, old_content, new_content, sub
     print('----------------1  w email! --------------------')
     email = email_sender
     password = password_sender
-    body = body + f'Poprzednie wartosci: \n' + old_content + f'\nNowe wartości: \n' + new_content
+    body = body + f'\nPoprzednie wartosci: \n' + old_content + f'\n\nNowe wartości: \n\n' + new_content
     msg = f'Subject: {subject}\n\n{body}\n{url}'.encode('UTF-8')
     server = smtplib.SMTP_SSL('smtp.gmail.com', 465)
     server.login(email, password)
