@@ -58,22 +58,22 @@ class Checker:
     @staticmethod
     def check_answear_com(source):
         content = BeautifulSoup(source.content, "html.parser")
-        return content.find('div', {'class': 'ProductCard__priceWrapper__Tyf2d'}).text
+        return ' '.join(content.find('div', {'class': 'ProductCard__priceWrapper__Tyf2d'}).text.split())
 
     @staticmethod
     def check_leecooper(source):
         content = BeautifulSoup(source.content, "html.parser")
-        return content.find('div', {'class': 'product_info'}).text
+        return ' '.join(content.find('div', {'class': 'product_info'}).text.split())
 
     @staticmethod
     def check_ewozki(source):
         content = BeautifulSoup(source.content, "html.parser")
-        return content.find('div', {'class': 'price-available'}).text
+        return ' '.join(content.find('div', {'class': 'price-available'}).text.split())
 
     @staticmethod
     def check_wrangler(source):
         content = BeautifulSoup(source.content, "html.parser")
-        return content.find('div', {'class': 'pdp-detail'}).text
+        return ' '.join(content.find('div', {'class': 'pdp-detail'}).text.split())
 
     @staticmethod
     def scrap_wrangler(url):
@@ -93,7 +93,7 @@ def track_links():
         for url, data in iteration.items():
             content = check_link_changes(url)
             if content and content != data["content"]:
-                send_email(url, email_sender, password_sender, content, data["content"])
+                send_email(url, email_sender, password_sender, data["content"], content)
                 data["content"] = content
                 data["changed"] = True
                 print(f"Link {url} content has changed!")
@@ -130,7 +130,7 @@ def delete(url):
         save_data(tracked_links)
     return redirect(url_for("index"))
 
-def send_email(url, email_sender, password_sender, old_content, new_content, subject='Link się zmienił!', body='Jakiś link się zmienił'):
+def send_email(url, email_sender, password_sender, old_content, new_content, subject='Link się zmienił!', body='Jakiś link się zmienił\n'):
     print('----------------1  w email! --------------------')
     email = email_sender
     password = password_sender

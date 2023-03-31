@@ -6,6 +6,17 @@
     <title>Link Tracker</title>
 </head>
 <body>
+<style>
+  .zaokraglone-tlo {
+    display: inline-block;
+    background-color: red;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-family: Arial, sans-serif;
+    font-size: 18px;
+  }
+  </style>
     <h1>Link Tracker</h1>
     <form method="POST">
         <label for="url">URL to track:</label>
@@ -16,8 +27,8 @@
     <h2>Tracked URLs</h2>
     <ul>
         {% for url, data in tracked_links.items() %}
-        <li>
-            <a href="{{ url }}" target="_blank">{{ url }}</a> {% if data.changed %}(Changed!){% endif %}
+        <li style ="background-color:LightGray; color:DimGray">
+            <a href="{{ url }}" target="_blank">{{ url }}</a> {% if data.changed %}<span class="zaokraglone-tlo">Changed</span>{% endif %}
             <a href="{{ url_for('delete', url=url) }}">
                 <button style="
                     font-size: 16px;
