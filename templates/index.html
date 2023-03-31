@@ -4,19 +4,49 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Link Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Open Sans', sans-serif;
+        }
+        .link-block {
+            background-color: #eaecee;
+            color: #4e4e4e;
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .link-info {
+            display: flex;
+            flex-direction: column;
+        }
+        .rounded-background {
+            display: inline-block;
+            background-color: #ff5e5e;
+            color: #010000;
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-family: 'Open Sans', sans-serif;
+            font-size: 14px;
+            margin-left: 10px;
+        }
+        .delete-button {
+            font-size: 16px;
+            font-weight: bold;
+            background-color: #4e4e4e;
+            color: #eaecee;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+    </style>
 </head>
 <body>
-<style>
-  .zaokraglone-tlo {
-    display: inline-block;
-    background-color: red;
-    color: white;
-    padding: 10px 20px;
-    border-radius: 10px;
-    font-family: Arial, sans-serif;
-    font-size: 18px;
-  }
-  </style>
     <h1>Link Tracker</h1>
     <form method="POST">
         <label for="url">URL to track:</label>
@@ -25,30 +55,23 @@
     </form>
     <hr>
     <h2>Tracked URLs</h2>
-    <ul>
+    <div>
         {% for url, data in tracked_links.items() %}
-        <li style ="background-color:LightGray; color:DimGray">
-            <a href="{{ url }}" target="_blank">{{ url }}</a> {% if data.changed %}<span class="zaokraglone-tlo">Changed</span>{% endif %}
-            <a href="{{ url_for('delete', url=url) }}">
-                <button style="
-                    font-size: 16px;
-                    font-weight: bold;
-                    color: white;
-                    background-color: blue;
-                    border: none;
-                    padding: 10px 20px;
-                    cursor: pointer;
-                    border-radius: 5px;
-                    text-decoration: none;
-                ">
-                    Delete
-                </button></a>
-            <ul>Added: {{ data.check_date }}</ul>
-            <ul>Last check: {% if data.last_check_date %}{{data.last_check_date}}{% endif %}</ul>
-            <ul>Checked times: {% if data.counter %}{{data.counter}}{% endif %}</ul>
-        </li>
+        <div class="link-block">
+            <div class="link-info">
+                <a href="{{ url }}" target="_blank">{{ url }}</a>
+                <ul>Added: {{ data.check_date }}</ul>
+                <ul>Last check: {% if data.last_check_date %}{{data.last_check_date}}{% endif %}</ul>
+                <ul>Checked times: {% if data.counter %}{{data.counter}}{% endif %}</ul>
+            </div>
+            <div>
+                {% if data.changed %}<span class="rounded-background">Changed</span>{% endif %}
+                <a href="{{ url_for('delete', url=url) }}">
+                    <button class="delete-button">Delete</button>
+                </a>
+            </div>
+        </div>
         {% endfor %}
-    </ul>
+    </div>
 </body>
 </html>
-

@@ -73,7 +73,7 @@ class Checker:
     @staticmethod
     def check_wrangler(source):
         content = BeautifulSoup(source.content, "html.parser")
-        return ' '.join(content.find('div', {'class': 'pdp-detail'}).text.split())
+        return ' '.join(content.find('div', {'class': 'prices'}).text.split())
 
     @staticmethod
     def scrap_wrangler(url):
