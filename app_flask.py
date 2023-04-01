@@ -47,6 +47,8 @@ def check_link_changes(url):
             content = Checker.check_ewozki(r)
         elif 'wrangler.com' in url:
             content = Checker.check_wrangler(r)
+        elif 'zalando.pl' in url:
+            content = Checker.check_zalando(r)
 
         return content
 
@@ -69,12 +71,17 @@ class Checker:
     @staticmethod
     def check_ewozki(source):
         content = BeautifulSoup(source.content, "html.parser")
-        return ' '.join(content.find('div', {'class': 'price-available'}).text.split())
+        return ' '.join(content.find('div', {'class': 'price-flex'}).text.split())
 
     @staticmethod
     def check_wrangler(source):
         content = BeautifulSoup(source.content, "html.parser")
         return ' '.join(content.find('div', {'class': 'prices'}).text.split())
+
+    @staticmethod
+    def check_zalando(source):
+        content = BeautifulSoup(source.content, "html.parser")
+        return ' '.join(content.find('div', {'class': '_0Qm8W1 uqkIZw dgII7d TQ5FLB'}).text.split())
 
     @staticmethod
     def scrap_wrangler(url):
