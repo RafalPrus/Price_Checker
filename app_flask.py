@@ -34,7 +34,10 @@ tracked_links = load_data()
 def check_link_changes(url):
     try:
         if 'wrangler.com' in url:
-            r = Checker.scrap_wrangler(url)
+            r = Checker.scrap_symulator(url)
+            r.raise_for_status()
+        elif 'zalando.pl' in url:
+            r = Checker.scrap_symulator(url)
             r.raise_for_status()
         else:
             r = requests.get(url)
@@ -81,10 +84,10 @@ class Checker:
     @staticmethod
     def check_zalando(source):
         content = BeautifulSoup(source.content, "html.parser")
-        return ' '.join(content.find('div', {'class': '_0Qm8W1 uqkIZw dgII7d TQ5FLB'}).text.split())
+        return ' '.join(content.find('div', {'class': '_0xLoFW u9KIT8 vSgP6A'}).text.split())
 
     @staticmethod
-    def scrap_wrangler(url):
+    def scrap_symulator(url):
         scraper = cloudscraper.create_scraper(
             browser={
                 'browser': 'chrome',
@@ -121,6 +124,7 @@ def track_links():
 def index():
     if request.method == "POST":
         url = request.form.get("url")
+        print(request.form.get("url"))
         if url:
             tracked_links = load_data()
             tracked_links[url] = {"content": check_link_changes(url), "changed": False, 'check_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
