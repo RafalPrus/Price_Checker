@@ -23,6 +23,9 @@
             display: flex;
             flex-direction: column;
         }
+        .details {
+            display: none;
+        }
         .rounded-background {
             display: inline-block;
             background-color: #ff5e5e;
@@ -35,6 +38,7 @@
         }
         .delete-button {
             font-size: 16px;
+            border-radius: 5px;
             font-weight: bold;
             background-color: #4e4e4e;
             color: #eaecee;
@@ -44,7 +48,37 @@
             border-radius: 5px;
             text-decoration: none;
         }
-    </style>
+        .details-button {
+            font-size: 16px;
+            font-weight: bold;
+            background-color: #4e4e4e;
+            color: #eaecee;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            text-decoration: none;
+            width: 80px;
+            height: 30px;
+            justify-content: center;
+            align-items: center;
+            display: flex;
+            }
+            </style>
+    <script>
+    function toggleDetails(id, button) {
+        var details = document.getElementById(id);
+        if (details.style.display === "none") {
+            details.style.display = "block";
+            button.innerText = "Hide";
+        } else {
+            details.style.display = "none";
+            button.innerText = "Details";
+        }
+    }
+    </script>
+
+
 </head>
 <body>
     <h1>Link Tracker</h1>
@@ -60,10 +94,13 @@
         <div class="link-block">
             <div class="link-info">
                 <a href="{{ url }}" target="_blank">{{ url }}</a>
-                <ul>Added: {{ data.check_date }}</ul>
-                <ul>Last check: {% if data.last_check_date %}{{data.last_check_date}}{% endif %}</ul>
-                <ul>Last price: {% if data.content %}{{data.content}}{% endif %}</ul>
-                <ul>Checked times: {% if data.counter %}{{data.counter}}{% endif %}</ul>
+                <button class="details-button" onclick="toggleDetails('{{ loop.index }}', this)">Details</button>
+                <div class="details" id="{{ loop.index }}">
+                    <ul>Added: {{ data.check_date }}</ul>
+                    <ul>Last check: {% if data.last_check_date %}{{data.last_check_date}}{% endif %}</ul>
+                    <ul>Last price: {% if data.content %}{{data.content}}{% endif %}</ul>
+                    <ul>Checked times: {% if data.counter %}{{data.counter}}{% endif %}</ul>
+                </div>
             </div>
             <div>
                 {% if data.changed %}<span class="rounded-background">Changed</span>{% endif %}
