@@ -22,9 +22,25 @@
         .link-info {
             display: flex;
             flex-direction: column;
+            margin-top: 10px;
+            margin-bottom: 10px;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+        .options > * {
+            margin-bottom: 5px;
+        }
+
+        .options > *:last-child {
+            margin-bottom: 0;
         }
         .details {
             display: none;
+            margin-top: 5px;
         }
         .rounded-background {
             display: inline-block;
@@ -34,7 +50,6 @@
             border-radius: 10px;
             font-family: 'Open Sans', sans-serif;
             font-size: 14px;
-            margin-left: 10px;
         }
         .delete-button {
             font-size: 16px;
@@ -58,11 +73,12 @@
             cursor: pointer;
             border-radius: 5px;
             text-decoration: none;
-            width: 80px;
+            width: 140px;
             height: 30px;
             justify-content: center;
             align-items: center;
             display: flex;
+            margin-top: 5px;
             }
             </style>
     <script>
@@ -70,10 +86,10 @@
         var details = document.getElementById(id);
         if (details.style.display === "none") {
             details.style.display = "block";
-            button.innerText = "Hide";
+            button.innerText = "Hide Details";
         } else {
             details.style.display = "none";
-            button.innerText = "Details";
+            button.innerText = "Show Details";
         }
     }
     </script>
@@ -94,7 +110,7 @@
         <div class="link-block">
             <div class="link-info">
                 <a href="{{ url }}" target="_blank">{{ url }}</a>
-                <button class="details-button" onclick="toggleDetails('{{ loop.index }}', this)">Details</button>
+                <button class="details-button" onclick="toggleDetails('{{ loop.index }}', this)">Show Details</button>
                 <div class="details" id="{{ loop.index }}">
                     <ul>Added: {{ data.check_date }}</ul>
                     <ul>Last check: {% if data.last_check_date %}{{data.last_check_date}}{% endif %}</ul>
@@ -102,8 +118,8 @@
                     <ul>Checked times: {% if data.counter %}{{data.counter}}{% endif %}</ul>
                 </div>
             </div>
-            <div>
-                {% if data.changed %}<span class="rounded-background">Changed</span>{% endif %}
+            <div class ="options">
+                {% if data.changed %}<div class="rounded-background">Changed</div>{% endif %}
                 <a href="{{ url_for('delete', url=url) }}">
                     <button class="delete-button">Delete</button>
                 </a>
