@@ -26,6 +26,7 @@ def save_data(data):
 
 
 
+
 app = Flask(__name__)
 tracked_links = load_data()
 
@@ -33,31 +34,27 @@ tracked_links = load_data()
 
 def check_link_changes(url):
     try:
-        if 'wrangler.com' in url:
-            r = Checker.scrap_symulator(url)
-            r.raise_for_status()
-        elif 'zalando.pl' in url:
-            r = Checker.scrap_symulator(url)
-            r.raise_for_status()
-        else:
-            r = requests.get(url)
-            r.raise_for_status()
-        if 'answear.com' in url:
-            content = Checker.check_answear_com(r)
-        elif 'leecooper' in url:
-            content = Checker.check_leecooper(r)
-        elif 'ewozki.eu' in url:
-            content = Checker.check_ewozki(r)
-        elif 'wrangler.com' in url:
-            content = Checker.check_wrangler(r)
-        elif 'zalando.pl' in url:
-            content = Checker.check_zalando(r)
+        domain_to_scrap_symulator = ['wrangler.com', 'zalando.pl']
 
-        return content
+        for domain, scraper in Domains.DOMAIN_TO_SCRAPER.items():
+            if domain in url:
+                if domain in domain_to_scrap_symulator:
+                    r = Checker.scrap_symulator(url)
+                else:
+                    r = requests.get(url)
+                r.raise_for_status()
+                content = scraper(r)
+                return content
+
+        # If no matching domain found
+        print('Ta witryna nie jest obsługiwana...')
+        r = requests.get(url)
+        r.raise_for_status()
 
     except Exception as e:
         print(f"Error checking link {url}: {e}")
         return None
+
 
 class Checker:
 
@@ -152,6 +149,16 @@ def send_email(url, email_sender, password_sender, old_content, new_content, sub
     server.login(email, password)
     server.sendmail(email, email, msg)
     server.quit()
+
+
+class Domains():
+    DOMAIN_TO_SCRAPER = {
+        'answear.com': Checker.check_answear_com,
+        'leecooper': Checker.check_leecooper,
+        'ewozki.eu': Checker.check_ewozki,
+        'wrangler.com': Checker.check_wrangler,
+        'zalando.pl': Checker.check_zalando
+    }
 
 
 
