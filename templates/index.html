@@ -97,6 +97,13 @@
 
 </head>
 <body>
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <script>alert("{{ message }}");</script>
+        {% endfor %}
+    {% endif %}
+    {% endwith %}
     <h1>Link Tracker</h1>
     <form method="POST">
         <label for="url">URL to track:</label>

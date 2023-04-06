@@ -3,7 +3,7 @@ from datetime import datetime
 import threading
 from bs4 import BeautifulSoup
 import requests
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 from config import email_sender, password_sender
 import smtplib
 import json
@@ -28,6 +28,7 @@ def save_data(data):
 
 
 app = Flask(__name__)
+app.config['SECRET_KEY'] = 'my_secret_key'
 tracked_links = load_data()
 
 
@@ -45,6 +46,8 @@ def check_link_changes(url):
                 r.raise_for_status()
                 content = scraper(r)
                 return content
+            else:
+                return False
 
         # If no matching domain found
         print('Ta witryna nie jest obsługiwana...')
@@ -113,7 +116,7 @@ def track_links():
             else:
                 data['counter'] = 1
             save_data(iteration)
-        time.sleep(1200)
+        time.sleep(2400)
 
 
 
@@ -123,10 +126,16 @@ def index():
         url = request.form.get("url")
         print(request.form.get("url"))
         if url:
-            tracked_links = load_data()
-            tracked_links[url] = {"content": check_link_changes(url), "changed": False, 'check_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
-            save_data(tracked_links)
-            return redirect(url_for("index"))
+            if Domains.domain_search(url):
+                tracked_links = load_data()
+                tracked_links[url] = {"content": check_link_changes(url), "changed": False, 'check_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
+                save_data(tracked_links)
+                return redirect(url_for("index"))
+            else:
+                print('Ta strona nie jest obsługiwana!')
+                flash('Niedozwolona nazwa, wybierz inną!')
+                tracked_links = load_data()
+                return render_template("index.html", tracked_links=tracked_links)
     tracked_links = load_data()
     return render_template("index.html", tracked_links=tracked_links)
 
@@ -151,6 +160,9 @@ def send_email(url, email_sender, password_sender, old_content, new_content, sub
     server.quit()
 
 
+
+
+
 class Domains():
     DOMAIN_TO_SCRAPER = {
         'answear.com': Checker.check_answear_com,
@@ -159,6 +171,12 @@ class Domains():
         'wrangler.com': Checker.check_wrangler,
         'zalando.pl': Checker.check_zalando
     }
+    @classmethod
+    def domain_search(cls, url):
+        for domain, scraper in Domains.DOMAIN_TO_SCRAPER.items():
+            if domain in url:
+                return True
+        return False
 
 
 
