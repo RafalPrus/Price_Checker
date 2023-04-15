@@ -126,7 +126,7 @@ def index():
         url = request.form.get("url")
         print(request.form.get("url"))
         if url:
-            if Domains.domain_search(url):
+            if Domains.domain_validator(url):
                 tracked_links = load_data()
                 tracked_links[url] = {"content": check_link_changes(url), "changed": False, 'check_date': datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
                 save_data(tracked_links)
@@ -172,7 +172,7 @@ class Domains():
         'zalando.pl': Checker.check_zalando
     }
     @classmethod
-    def domain_search(cls, url):
+    def domain_validator(cls, url):
         for domain, scraper in Domains.DOMAIN_TO_SCRAPER.items():
             if domain in url:
                 return True
