@@ -19,6 +19,10 @@
             justify-content: space-between;
             align-items: center;
         }
+        .content-container {
+            margin: 0 auto;
+            padding: 0 40px;
+        }
         .link-info {
             display: flex;
             flex-direction: column;
@@ -97,6 +101,7 @@
 
 </head>
 <body>
+    <div class="content-container">
     {% with messages = get_flashed_messages() %}
     {% if messages %}
         {% for message in messages %}
