@@ -16,10 +16,12 @@ pip install -r requirements.txt
 
 ## Usage
 To use this app you need to create file config.py with:
+```bash
 email_sender = 'sender_email_adress@example.com'
 email_s_password = 'example'
 email_recipient = 'recipient_email_adress@example.com'
 email_r_password = 'example'
+```
 
 After creating the config.py file with your own data, run the app_flask.py file. To start using the program, simply enter the following address in your browser window:
 http://127.0.0.1:5000
