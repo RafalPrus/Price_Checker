@@ -8,6 +8,7 @@
     <style>
         body {
             font-family: 'Open Sans', sans-serif;
+            color: #58469D;
         }
         .link-block {
             background-color: #eaecee;
@@ -48,41 +49,50 @@
         }
         .rounded-background {
             display: inline-block;
+            font-size: 12px;
             background-color: #ff5e5e;
-            color: #010000;
-            padding: 5px 10px;
-            border-radius: 10px;
-            font-family: 'Open Sans', sans-serif;
-            font-size: 14px;
+            color: #eaecee;
+            font-weight: bold;
+            padding: 10px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            border: none;
+            text-decoration: none;
+            text-align: center;
+            width: 140px;
+            height: 40px;
+
         }
         .delete-button {
-            font-size: 16px;
-            border-radius: 5px;
+            font-size: 12px;
+            border-radius: 25px;
             font-weight: bold;
             background-color: #4e4e4e;
             color: #eaecee;
             border: none;
             padding: 10px 20px;
             cursor: pointer;
-            border-radius: 5px;
-            text-decoration: none;
-        }
-        .details-button {
-            font-size: 16px;
-            font-weight: bold;
-            background-color: #4e4e4e;
-            color: #eaecee;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            border-radius: 5px;
             text-decoration: none;
             width: 140px;
-            height: 30px;
-            justify-content: center;
+            height: 40px;
+        }
+        .details-button {
+            font-size: 12px;
+            font-weight: bold;
+            background-color: #5681FF;
+            color: #eaecee;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            border-radius: 25px;
+            text-decoration: none;
+            width: 140px;
+            height: 40px;
             align-items: center;
             display: flex;
-            margin-top: 5px;
+            margin-top: 10px;
+            justify-content: center;
+            align-items: center;
             }
             </style>
     <script>
@@ -90,10 +100,10 @@
         var details = document.getElementById(id);
         if (details.style.display === "none") {
             details.style.display = "block";
-            button.innerText = "Hide Details";
+            button.innerText = "HIDE";
         } else {
             details.style.display = "none";
-            button.innerText = "Show Details";
+            button.innerText = "DETAILS";
         }
     }
     </script>
@@ -115,14 +125,14 @@
         <input type="url" name="url" required>
         <button type="submit">Add URL</button>
     </form>
-    <hr>
+    <hr style="height:2px;border-width:0;color:gray;background-color:gray">
     <h2>Tracked URLs</h2>
     <div>
         {% for url, data in tracked_links.items() %}
         <div class="link-block">
             <div class="link-info">
                 <a href="{{ url }}" target="_blank">{{ url }}</a>
-                <button class="details-button" onclick="toggleDetails('{{ loop.index }}', this)">Show Details</button>
+                <button class="details-button" onclick="toggleDetails('{{ loop.index }}', this)">DETAILS</button>
                 <div class="details" id="{{ loop.index }}">
                     <ul>Added: {{ data.check_date }}</ul>
                     <ul>Last check: {% if data.last_check_date %}{{data.last_check_date}}{% endif %}</ul>
@@ -131,13 +141,14 @@
                 </div>
             </div>
             <div class ="options">
-                {% if data.changed %}<div class="rounded-background">Changed</div>{% endif %}
+                {% if data.changed %}<button class="rounded-background">NEW PRICE!</button>{% endif %}
                 <a href="{{ url_for('delete', url=url) }}">
-                    <button class="delete-button">Delete</button>
+                    <button class="delete-button">DELETE</button>
                 </a>
             </div>
         </div>
         {% endfor %}
+    </div>
     </div>
 </body>
 </html>

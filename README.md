@@ -24,7 +24,9 @@ email_r_password = 'example'
 ```
 
 After creating the config.py file with your own data, run the app_flask.py file. To start using the program, simply enter the following address in your browser window:
+```bash
 http://127.0.0.1:5000
+```
 
 Now you can add new products whose prices you want to monitor using the "URL to track" form:
 <URL form image>

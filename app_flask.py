@@ -160,10 +160,9 @@ def send_email(
     password_sender,
     old_content,
     new_content,
-    subject="Link się zmienił!",
-    body="Jakiś link się zmienił\n",
+    subject="Cena się zmieniła!!",
+    body="Cena produktu uległa zmianie: \n",
 ):
-    print("----------------1  w email! --------------------")
     email = email_sender
     password = password_sender
     body = (
