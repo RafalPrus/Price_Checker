@@ -4,27 +4,13 @@ import threading
 from bs4 import BeautifulSoup
 import requests
 from flask import Flask, render_template, request, redirect, url_for, flash
+from repositories import load_data, save_data
 from config import email_sender, password_sender
 import smtplib
-import json
-import os
 import cloudscraper
 
 
-DATA_FILE = "data/tracked_links.json"
 
-
-def load_data():
-    if os.path.exists(DATA_FILE):
-        with open(DATA_FILE, "r") as f:
-            return json.load(f)
-    return {}
-
-
-def save_data(data):
-    with open(DATA_FILE, "w") as f:
-        data = {key: value for key, value in sorted(data.items())}
-        json.dump(data, f)
 
 
 app = Flask(__name__)
@@ -32,30 +18,25 @@ app.config["SECRET_KEY"] = "my_secret_key"
 tracked_links = load_data()
 
 
-def check_link_changes(url):
+def check_link_changes(url: str):
     try:
         domain_to_scrap_symulator = ["wrangler.com", "zalando.pl"]
 
         for domain, scraper in Domains.DOMAIN_TO_SCRAPER.items():
             if domain in url:
                 if domain in domain_to_scrap_symulator:
-                    r = Checker.scrap_symulator(url)
+                    response = Checker.scrap_symulator(url)
                 else:
-                    r = requests.get(url)
-                r.raise_for_status()
-                content = scraper(r)
+                    response = requests.get(url)
+                response.raise_for_status()
+                content = scraper(response)
                 return content
             else:
                 return False
 
-        # If no matching domain found
-        print("Ta witryna nie jest obsługiwana...")
-        r = requests.get(url)
-        r.raise_for_status()
-
     except Exception as e:
-        print(f"Error checking link {url}: {e}")
-        return None
+        print(f"Error while checking link {url}: {e}")
+        return False
 
 
 class Checker:
@@ -77,6 +58,8 @@ class Checker:
 
     @staticmethod
     def check_ewozki(source):
+        print(f'typ wozki: ')
+        print(type(source))
         content = BeautifulSoup(source.content, "html.parser")
         return " ".join(content.find("div", {"class": "price-flex"}).text.split())
 
@@ -123,30 +106,29 @@ def track_links():
 
 @app.route("/", methods=["GET", "POST"])
 def index():
+    tracked_links = load_data()
     if request.method == "POST":
         url = request.form.get("url")
-        print(request.form.get("url"))
         if url:
             if Domains.domain_validator(url):
-                tracked_links = load_data()
-                tracked_links[url] = {
-                    "content": check_link_changes(url),
-                    "changed": False,
-                    "check_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                }
+                create_product(tracked_links, url)
                 save_data(tracked_links)
                 return redirect(url_for("index"))
             else:
-                print("Ta strona nie jest obsługiwana!")
                 flash("Niedozwolona nazwa, wybierz inną!")
-                tracked_links = load_data()
                 return render_template("index.html", tracked_links=tracked_links)
-    tracked_links = load_data()
     return render_template("index.html", tracked_links=tracked_links)
+
+def create_product(file: dict, new_url: str):
+    file[new_url] = {
+        "content": check_link_changes(new_url),
+        "changed": False,
+        "check_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+    }
 
 
 @app.route("/delete/<path:url>")
-def delete(url):
+def delete_product(url):
     tracked_links = load_data()
     if url in tracked_links:
         del tracked_links[url]
@@ -155,18 +137,15 @@ def delete(url):
 
 
 def send_email(
-    url,
-    email_sender,
-    password_sender,
-    old_content,
-    new_content,
-    subject="Cena się zmieniła!!",
-    body="Cena produktu uległa zmianie: \n",
+    url: str,
+    email: str,
+    password: str,
+    old_content: str,
+    new_content: str,
+    subject: str = "Cena się zmieniła!!",
 ):
-    email = email_sender
-    password = password_sender
     body = (
-        body
+        "Cena produktu uległa zmianie: \n"
         + f"\nPoprzednie wartosci: \n"
         + old_content
         + f"\n\nNowe wartości: \n\n"
@@ -189,7 +168,7 @@ class Domains:
     }
 
     @classmethod
-    def domain_validator(cls, url):
+    def domain_validator(cls, url: str):
         for domain, scraper in Domains.DOMAIN_TO_SCRAPER.items():
             if domain in url:
                 return True

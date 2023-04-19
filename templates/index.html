@@ -142,7 +142,7 @@
             </div>
             <div class ="options">
                 {% if data.changed %}<button class="rounded-background">NEW PRICE!</button>{% endif %}
-                <a href="{{ url_for('delete', url=url) }}">
+                <a href="{{ url_for('delete_product', url=url) }}">
                     <button class="delete-button">DELETE</button>
                 </a>
             </div>
