@@ -5,7 +5,7 @@ from bs4 import BeautifulSoup
 import requests
 from flask import Flask, render_template, request, redirect, url_for, flash
 from repositories import load_data, save_data
-from config import email_sender, password_sender
+from config import email_sender, password_sender, secret_key
 import smtplib
 import cloudscraper
 
@@ -14,7 +14,7 @@ import cloudscraper
 
 
 app = Flask(__name__)
-app.config["SECRET_KEY"] = "my_secret_key"
+app.config["SECRET_KEY"] = secret_key
 tracked_links = load_data()
 
 
