@@ -19,6 +19,15 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            overflow:hidden;
+            transform:scaleY(1);
+            transition: all 1s;
+        }
+        .link-block:hover {
+            background-color: #E6E6FA;
+        }
+        .link-block.collapsed {
+            transform:scaleY(0); // *squish*
         }
         .content-container {
             margin: 0 auto;
@@ -44,9 +53,12 @@
             margin-bottom: 0;
         }
         .details {
-            display: none;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-in-out;
             margin-top: 5px;
         }
+
         .rounded-background {
             display: inline-block;
             font-size: 12px;
@@ -98,14 +110,16 @@
     <script>
     function toggleDetails(id, button) {
         var details = document.getElementById(id);
-        if (details.style.display === "none") {
-            details.style.display = "block";
+
+        if (details.style.maxHeight === "0px" || details.style.maxHeight === "") {
+            details.style.maxHeight = details.scrollHeight + "px";
             button.innerText = "HIDE";
         } else {
-            details.style.display = "none";
+            details.style.maxHeight = "0px";
             button.innerText = "DETAILS";
         }
     }
+
     </script>
 
 
