@@ -26,9 +26,6 @@
         .link-block:hover {
             background-color: #E6E6FA;
         }
-        .link-block.collapsed {
-            transform:scaleY(0); // *squish*
-        }
         .content-container {
             margin: 0 auto;
             padding: 0 40px;
@@ -158,6 +155,9 @@
                 {% if data.changed %}<button class="rounded-background">NEW PRICE!</button>{% endif %}
                 <a href="{{ url_for('delete_product', url=url) }}">
                     <button class="delete-button">DELETE</button>
+                </a>
+                <a href="{{ url_for('check_on_demand', url=url) }}">
+                    <button class="delete-button">CHECK IT NOW</button>
                 </a>
             </div>
         </div>

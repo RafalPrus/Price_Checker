@@ -18,6 +18,7 @@ app.config["SECRET_KEY"] = secret_key
 tracked_links = load_data()
 
 
+
 def check_link_changes(url: str):
     try:
         domain_to_scrap_symulator = ["wrangler.com", "zalando.pl"]
@@ -133,6 +134,12 @@ def delete_product(url):
     if url in tracked_links:
         del tracked_links[url]
         save_data(tracked_links)
+    return redirect(url_for("index"))
+
+@app.route("/check/<path:url>")
+def check_on_demand(url):
+    check_link_changes(url)
+    # Have to add new function for compare only specific link with data from check_link_changes
     return redirect(url_for("index"))
 
 
