@@ -89,6 +89,7 @@ def track_links():
         iteration = load_data().copy()
         for url, data in iteration.items():
             content = check_link_changes(url)
+            # pack it into separate function for check only specific link info
             if content and content != data["content"]:
                 send_email(url, email_sender, password_sender, data["content"], content)
                 data["content"] = content
@@ -112,8 +113,8 @@ def index():
         url = request.form.get("url")
         if url:
             if Domains.domain_validator(url):
-                create_product(tracked_links, url)
-                save_data(tracked_links)
+                updated_links = create_product(tracked_links, url)
+                save_data(updated_links)
                 return redirect(url_for("index"))
             else:
                 flash("Niedozwolona nazwa, wybierz inną!")
@@ -126,6 +127,8 @@ def create_product(file: dict, new_url: str):
         "changed": False,
         "check_date": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
     }
+
+    return file
 
 
 @app.route("/delete/<path:url>")
