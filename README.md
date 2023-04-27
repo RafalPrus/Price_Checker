@@ -40,6 +40,7 @@ Using the "details" button, you can display more information about tracking a pa
 ## Todo
 - [ ] Add clear button for changed prodtucts
 - [ ] Add clear details button
-- [ ] Add button for signle force price check
+- [ ] Add button for signle force price check 
+- [ ] Divide the project to make it more compliant with the MVC design pattern standards
 - [ ] Add screenshots to the README.md that will help understand how to prepare folders with products.
 - [ ] Add Polish README.md
