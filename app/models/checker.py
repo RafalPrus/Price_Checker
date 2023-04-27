@@ -1,5 +1,7 @@
 from bs4 import BeautifulSoup
 import cloudscraper
+
+
 class Checker:
     @staticmethod
     def check_answear_com(source):
@@ -19,7 +21,7 @@ class Checker:
 
     @staticmethod
     def check_ewozki(source):
-        print(f'typ wozki: ')
+        print(f"typ wozki: ")
         print(type(source))
         content = BeautifulSoup(source.content, "html.parser")
         return " ".join(content.find("div", {"class": "price-flex"}).text.split())

@@ -1,5 +1,4 @@
 import requests
-
 from app.models.checker import Checker
 from app.models.domain import Domain
 from app.models.repositories.repositories import load_data, save_data
@@ -7,6 +6,8 @@ from datetime import datetime
 import time
 import smtplib
 from config import email_sender, password_sender
+
+
 def check_link_changes(url: str):
     try:
         domain_to_scrap_symulator = ["wrangler.com", "zalando.pl"]
@@ -26,6 +27,7 @@ def check_link_changes(url: str):
     except Exception as e:
         print(f"Error while checking link {url}: {e}")
         return False
+
 
 def track_links():
     while True:
@@ -48,6 +50,7 @@ def track_links():
             save_data(iteration)
         time.sleep(2400)
 
+
 def send_email(
     url: str,
     email: str,
@@ -68,6 +71,7 @@ def send_email(
     server.login(email, password)
     server.sendmail(email, email, msg)
     server.quit()
+
 
 def create_product(file: dict, new_url: str):
     file[new_url] = {

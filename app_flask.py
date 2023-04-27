@@ -1,4 +1,8 @@
-from app.controllers.index_controller import index_controller, check_on_demand_controller, delete_product_controller
+from app.controllers.index_controller import (
+    index_controller,
+    check_on_demand_controller,
+    delete_product_controller,
+)
 import threading
 from flask import Flask
 from app.models.repositories.repositories import load_data
@@ -10,36 +14,19 @@ app.config["SECRET_KEY"] = secret_key
 tracked_links = load_data()
 
 
-
-
-
-
-
-
-
-
-
-
 @app.route("/", methods=["GET", "POST"])
 def index():
     return index_controller()
-
-
 
 
 @app.route("/delete/<path:url>")
 def delete_product(url):
     return delete_product_controller((url))
 
+
 @app.route("/check/<path:url>")
 def check_on_demand(url):
     return check_on_demand_controller(url)
-
-
-
-
-
-
 
 
 if __name__ == "__main__":
