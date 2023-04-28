@@ -23,6 +23,6 @@ def save_separate_link_data(url: str):
 
 
 def save_data(data):
-    with open(DATA_FILE, "w") as f:
+    with open(DATA_FILE, "w", encoding='utf-8') as f:
         data = {key: value for key, value in sorted(data.items())}
-        json.dump(data, f)
+        json.dump(data, f, ensure_ascii=False, indent=4)

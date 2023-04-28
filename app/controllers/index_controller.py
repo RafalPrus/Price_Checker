@@ -1,7 +1,7 @@
 from flask import request, url_for, redirect, flash, render_template
 from app.models.domain import Domain
 from app.models.repositories.repositories import load_data, save_data
-from app.models.utils import create_product, track_separate_link
+from app.models.utils import create_product, track_separate_link, clear_changed_status
 
 
 def index_controller():
@@ -21,6 +21,11 @@ def index_controller():
 
 def check_on_demand_controller(url):
     track_separate_link(url)
+    # Have to add new function for compare only specific link with data from check_link_changes
+    return redirect(url_for("index"))
+
+def clear_on_demand_controller(url):
+    clear_changed_status(url)
     # Have to add new function for compare only specific link with data from check_link_changes
     return redirect(url_for("index"))
 

@@ -51,17 +51,17 @@ def track_separate_link(url):
     save_data(tracking_data)
 
 def compare_data(url, data, new_content=None):
-    print('w compare_price to new content')
-    print(new_content)
-    print('a to data: ')
-    print(data["content"])
     if new_content and new_content != data["content"]:
-        print('w ifie')
         send_email(url, email_sender, password_sender, data["content"], new_content)
         data["content"] = new_content
         data["changed"] = True
         print(f"Link {url} content has changed!")
     return data
+
+def clear_changed_status(url):
+    tracking_data = load_data().copy()
+    tracking_data[url]["changed"] = False
+    save_data(tracking_data)
 
 def count_loops(data):
     if "counter" in data:

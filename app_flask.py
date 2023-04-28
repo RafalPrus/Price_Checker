@@ -1,7 +1,7 @@
 from app.controllers.index_controller import (
     index_controller,
     check_on_demand_controller,
-    delete_product_controller,
+    delete_product_controller, clear_on_demand_controller,
 )
 import threading
 from flask import Flask
@@ -27,6 +27,12 @@ def delete_product(url):
 @app.route("/check/<path:url>")
 def check_on_demand(url):
     return check_on_demand_controller(url)
+
+
+@app.route("/clear/<path:url>")
+def clear_on_demand(url):
+    return clear_on_demand_controller(url)
+
 
 
 if __name__ == "__main__":

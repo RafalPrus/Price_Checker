@@ -72,6 +72,10 @@
             height: 40px;
 
         }
+        .rounded-background:hover {
+            background-color: #E6E6FA;
+        }
+
         .delete-button {
             font-size: 12px;
             border-radius: 25px;
@@ -103,6 +107,27 @@
             justify-content: center;
             align-items: center;
             }
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            100% {
+                background-position: 100% 50%;
+            }
+        }
+
+        .new-price-button {
+            background-image: linear-gradient(to right, #5681FF 50%, #ff5e5e 50%);
+            background-size: 200% 100%;
+            background-position: 100% 0;
+            transition: all 1s ease;
+        }
+
+        .new-price-button:hover {
+            background-position: 0 0;
+            color: #eaecee;
+        }
+
             </style>
     <script>
     function toggleDetails(id, button) {
@@ -116,7 +141,13 @@
             button.innerText = "DETAILS";
         }
     }
+    function changeText(button) {
+        button.innerHTML = "CLEAR";
+    }
 
+    function restoreText(button) {
+        button.innerHTML = "NEW PRICE!";
+    }
     </script>
 
 
@@ -152,7 +183,11 @@
                 </div>
             </div>
             <div class ="options">
-                {% if data.changed %}<button class="rounded-background">NEW PRICE!</button>{% endif %}
+                {% if data.changed %}
+                    <a href="{{ url_for('clear_on_demand', url=url) }}">
+                        <button class="rounded-background new-price-button" onmouseover="changeText(this)" onmouseout="restoreText(this)">NEW PRICE!</button>
+                    </a>
+                {% endif %}
                 <a href="{{ url_for('delete_product', url=url) }}">
                     <button class="delete-button">DELETE</button>
                 </a>
