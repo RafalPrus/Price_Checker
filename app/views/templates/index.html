@@ -10,6 +10,7 @@
             font-family: 'Open Sans', sans-serif;
             color: #58469D;
         }
+
         .link-block {
             background-color: #eaecee;
             color: #4e4e4e;
@@ -23,25 +24,30 @@
             transform:scaleY(1);
             transition: all 1s;
         }
+
         .link-block:hover {
             background-color: #E6E6FA;
         }
+
         .content-container {
             margin: 0 auto;
             padding: 0 40px;
         }
+
         .link-info {
             display: flex;
             flex-direction: column;
             margin-top: 10px;
             margin-bottom: 10px;
         }
+
         .options {
             display: flex;
             flex-direction: column;
             align-items: center;
             margin-bottom: 5px;
         }
+
         .options > * {
             margin-bottom: 5px;
         }
@@ -49,6 +55,7 @@
         .options > *:last-child {
             margin-bottom: 0;
         }
+
         .details {
             max-height: 0;
             overflow: hidden;
@@ -72,6 +79,7 @@
             height: 40px;
 
         }
+
         .rounded-background:hover {
             background-color: #E6E6FA;
         }
@@ -89,6 +97,7 @@
             width: 140px;
             height: 40px;
         }
+
         .details-button {
             font-size: 12px;
             font-weight: bold;
@@ -106,7 +115,8 @@
             margin-top: 10px;
             justify-content: center;
             align-items: center;
-            }
+        }
+
         @keyframes gradient {
             0% {
                 background-position: 0% 50%;
@@ -127,8 +137,7 @@
             background-position: 0 0;
             color: #eaecee;
         }
-
-            </style>
+    </style>
     <script>
     function toggleDetails(id, button) {
         var details = document.getElementById(id);
@@ -143,14 +152,12 @@
     }
     function changeText(button) {
         button.innerHTML = "CLEAR";
-    }
+        }
 
     function restoreText(button) {
         button.innerHTML = "NEW PRICE!";
-    }
+        }
     </script>
-
-
 </head>
 <body>
     <div class="content-container">
@@ -161,12 +168,19 @@
         {% endfor %}
     {% endif %}
     {% endwith %}
+    <img src="{{url_for('static', filename='price_checker.png')}}">
     <h1>Link Tracker</h1>
     <form method="POST">
         <label for="url">URL to track:</label>
         <input type="url" name="url" required>
         <button type="submit">Add URL</button>
     </form>
+    <h2>Currently supported list of stores:</h2>
+    <ul>
+        <li>answear.com</li>
+        <li>wrangler.com</li>
+        <li>zalando.pl</li>
+    </ul>
     <hr style="height:2px;border-width:0;color:gray;background-color:gray">
     <h2>Tracked URLs</h2>
     <div>
