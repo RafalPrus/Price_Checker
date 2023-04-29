@@ -11,6 +11,11 @@
             color: #58469D;
         }
 
+        img {
+              max-width: 100%;
+              height: auto;
+            }
+
         .link-block {
             background-color: #eaecee;
             color: #4e4e4e;
@@ -169,7 +174,7 @@
     {% endif %}
     {% endwith %}
     <img src="{{url_for('static', filename='price_checker.png')}}">
-    <h1>Link Tracker</h1>
+    <h1>Add new link: </h1>
     <form method="POST">
         <label for="url">URL to track:</label>
         <input type="url" name="url" required>
