@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,9 +13,9 @@
         }
 
         img {
-              max-width: 100%;
-              height: auto;
-            }
+            max-width: 100%;
+            height: auto;
+        }
 
         .link-block {
             background-color: #eaecee;
@@ -25,8 +26,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            overflow:hidden;
-            transform:scaleY(1);
+            overflow: hidden;
+            transform: scaleY(1);
             transition: all 1s;
         }
 
@@ -35,8 +36,18 @@
         }
 
         .content-container {
-            margin: 0 auto;
             padding: 0 40px;
+
+        }
+
+        .head-container {
+            max-width: 1440px;
+            margin: 0 auto;
+        }
+
+        .links-container {
+            max-width: 1340px;
+            margin: 0 auto;
         }
 
         .link-info {
@@ -53,11 +64,11 @@
             margin-bottom: 5px;
         }
 
-        .options > * {
+        .options>* {
             margin-bottom: 5px;
         }
 
-        .options > *:last-child {
+        .options>*:last-child {
             margin-bottom: 0;
         }
 
@@ -126,6 +137,7 @@
             0% {
                 background-position: 0% 50%;
             }
+
             100% {
                 background-position: 100% 50%;
             }
@@ -144,79 +156,84 @@
         }
     </style>
     <script>
-    function toggleDetails(id, button) {
-        var details = document.getElementById(id);
+        function toggleDetails(id, button) {
+            var details = document.getElementById(id);
 
-        if (details.style.maxHeight === "0px" || details.style.maxHeight === "") {
-            details.style.maxHeight = details.scrollHeight + "px";
-            button.innerText = "HIDE";
-        } else {
-            details.style.maxHeight = "0px";
-            button.innerText = "DETAILS";
+            if (details.style.maxHeight === "0px" || details.style.maxHeight === "") {
+                details.style.maxHeight = details.scrollHeight + "px";
+                button.innerText = "HIDE";
+            } else {
+                details.style.maxHeight = "0px";
+                button.innerText = "DETAILS";
+            }
         }
-    }
-    function changeText(button) {
-        button.innerHTML = "CLEAR";
+        function changeText(button) {
+            button.innerHTML = "CLEAR";
         }
 
-    function restoreText(button) {
-        button.innerHTML = "NEW PRICE!";
+        function restoreText(button) {
+            button.innerHTML = "NEW PRICE!";
         }
     </script>
 </head>
+
 <body>
     <div class="content-container">
-    {% with messages = get_flashed_messages() %}
-    {% if messages %}
-        {% for message in messages %}
+        <div class="head-container">
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            {% for message in messages %}
             <script>alert("{{ message }}");</script>
-        {% endfor %}
-    {% endif %}
-    {% endwith %}
-    <img src="{{url_for('static', filename='price_checker.png')}}">
-    <h1>Add new link: </h1>
-    <form method="POST">
-        <label for="url">URL to track:</label>
-        <input type="url" name="url" required>
-        <button type="submit">Add URL</button>
-    </form>
-    <h2>Currently supported list of stores:</h2>
-    <ul>
-        <li>answear.com</li>
-        <li>wrangler.com</li>
-        <li>zalando.pl</li>
-    </ul>
-    <hr style="height:2px;border-width:0;color:gray;background-color:gray">
-    <h2>Tracked URLs</h2>
-    <div>
-        {% for url, data in tracked_links.items() %}
-        <div class="link-block">
-            <div class="link-info">
-                <a href="{{ url }}" target="_blank">{{ url }}</a>
-                <button class="details-button" onclick="toggleDetails('{{ loop.index }}', this)">DETAILS</button>
-                <div class="details" id="{{ loop.index }}">
-                    <ul>Added: {{ data.check_date }}</ul>
-                    <ul>Last check: {% if data.last_check_date %}{{data.last_check_date}}{% endif %}</ul>
-                    <ul>Last price: {% if data.content %}{{data.content}}{% endif %}</ul>
-                    <ul>Checked times: {% if data.counter %}{{data.counter}}{% endif %}</ul>
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+            <img src="{{url_for('static', filename='price_checker.png')}}" , alt="Logo" , width="300px" />
+            <h1>Add new link: </h1>
+            <form method="POST">
+                <label for="url">URL to track:</label>
+                <input type="url" name="url" required>
+                <button type="submit">Add URL</button>
+            </form>
+            <h2>Currently supported list of stores:</h2>
+            <ul>
+                <li>answear.com</li>
+                <li>wrangler.com</li>
+                <li>zalando.pl</li>
+            </ul>
+            <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+        </div>
+        <div class="links-container">
+            <h2>Tracked URLs</h2>
+            {% for url, data in tracked_links.items() %}
+            <div class="link-block">
+                <div class="link-info">
+                    <a href="{{ url }}" target="_blank">{{ url }}</a>
+                    <button class="details-button" onclick="toggleDetails('{{ loop.index }}', this)">DETAILS</button>
+                    <div class="details" id="{{ loop.index }}">
+                        <ul>Added: {{ data.check_date }}</ul>
+                        <ul>Last check: {% if data.last_check_date %}{{data.last_check_date}}{% endif %}</ul>
+                        <ul>Last price: {% if data.content %}{{data.content}}{% endif %}</ul>
+                        <ul>Checked times: {% if data.counter %}{{data.counter}}{% endif %}</ul>
+                    </div>
+                </div>
+                <div class="options">
+                    {% if data.changed %}
+                    <a href="{{ url_for('clear_on_demand', url=url) }}">
+                        <button class="rounded-background new-price-button" onmouseover="changeText(this)"
+                            onmouseout="restoreText(this)">NEW PRICE!</button>
+                    </a>
+                    {% endif %}
+                    <a href="{{ url_for('delete_product', url=url) }}">
+                        <button class="delete-button">DELETE</button>
+                    </a>
+                    <a href="{{ url_for('check_on_demand', url=url) }}">
+                        <button class="delete-button">CHECK IT NOW</button>
+                    </a>
                 </div>
             </div>
-            <div class ="options">
-                {% if data.changed %}
-                    <a href="{{ url_for('clear_on_demand', url=url) }}">
-                        <button class="rounded-background new-price-button" onmouseover="changeText(this)" onmouseout="restoreText(this)">NEW PRICE!</button>
-                    </a>
-                {% endif %}
-                <a href="{{ url_for('delete_product', url=url) }}">
-                    <button class="delete-button">DELETE</button>
-                </a>
-                <a href="{{ url_for('check_on_demand', url=url) }}">
-                    <button class="delete-button">CHECK IT NOW</button>
-                </a>
-            </div>
+            {% endfor %}
         </div>
-        {% endfor %}
-    </div>
     </div>
 </body>
+
 </html>

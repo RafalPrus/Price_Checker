@@ -12,7 +12,6 @@ from config import email_sender, password_sender
 def check_link_changes(url: str):
     try:
         domain_to_scrap_symulator = ["wrangler.com", "zalando.pl"]
-
         for domain, scraper in Domain.DOMAIN_TO_SCRAPER.items():
             if domain in url:
                 if domain in domain_to_scrap_symulator:
