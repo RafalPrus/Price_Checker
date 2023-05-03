@@ -1,0 +1,152 @@
+body {
+    font-family: 'Open Sans', sans-serif;
+    color: #58469D;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+.link-block {
+    background-color: #eaecee;
+    color: #4e4e4e;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
+    transform: scaleY(1);
+    transition: all 1s;
+}
+
+.link-block:hover {
+    background-color: #E6E6FA;
+}
+
+.content-container {
+    padding: 0 40px;
+
+}
+
+.head-container {
+    max-width: 1440px;
+    margin: 0 auto;
+}
+
+.links-container {
+    max-width: 1340px;
+    margin: 0 auto;
+}
+
+.link-info {
+    display: flex;
+    flex-direction: column;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.options {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 5px;
+}
+
+.options>* {
+    margin-bottom: 5px;
+}
+
+.options>*:last-child {
+    margin-bottom: 0;
+}
+
+.details {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.5s ease-in-out;
+    margin-top: 5px;
+}
+
+.rounded-background {
+    display: inline-block;
+    font-size: 12px;
+    background-color: #ff5e5e;
+    color: #eaecee;
+    font-weight: bold;
+    padding: 10px 20px;
+    border-radius: 25px;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    text-align: center;
+    width: 140px;
+    height: 40px;
+
+}
+
+.rounded-background:hover {
+    background-color: #E6E6FA;
+}
+
+.delete-button {
+    font-size: 12px;
+    border-radius: 25px;
+    font-weight: bold;
+    background-color: #4e4e4e;
+    color: #eaecee;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    text-decoration: none;
+    width: 140px;
+    height: 40px;
+}
+
+.details-button {
+    font-size: 12px;
+    font-weight: bold;
+    background-color: #5681FF;
+    color: #eaecee;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 25px;
+    text-decoration: none;
+    width: 140px;
+    height: 40px;
+    align-items: center;
+    display: flex;
+    margin-top: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    100% {
+        background-position: 100% 50%;
+    }
+}
+
+.new-price-button {
+    background-image: linear-gradient(to right, #5681FF 50%, #ff5e5e 50%);
+    background-size: 200% 100%;
+    background-position: 100% 0;
+    transition: all 1s ease;
+}
+
+.new-price-button:hover {
+    background-position: 0 0;
+    color: #eaecee;
+}
+
+ul {
+    display: block;
+    list-style-type: None;
+}
