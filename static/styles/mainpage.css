@@ -8,6 +8,12 @@ img {
     height: auto;
 }
 
+ul > img {
+    max-width: 200px;
+    height: auto;
+    padding: 15px;
+}
+
 .link-block {
     background-color: #eaecee;
     color: #4e4e4e;

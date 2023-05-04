@@ -39,7 +39,7 @@
             {% endfor %}
             {% endif %}
             {% endwith %}
-            <img src="{{url_for('static', filename='images/price_checker.png')}}" , alt="Logo" , width="300px" />
+            <img src="{{url_for('static', filename='images/price_checker.png')}}" , alt="Logo" , width="500px" />
             <h1>Add new link: </h1>
             <form method="POST">
                 <label for="url">URL to track:</label>
@@ -48,9 +48,9 @@
             </form>
             <h2>Currently supported list of stores:</h2>
             <ul>
-                <li>answear.com</li>
-                <li>wrangler.com</li>
-                <li>zalando.pl</li>
+                {% for image in images %}
+                    <img src="{{ url_for('static', filename='/images/shops/' + image)}}">
+                {% endfor %}
             </ul>
             <hr style="height:2px;border-width:0;color:gray;background-color:gray">
         </div>

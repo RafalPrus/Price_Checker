@@ -1,3 +1,5 @@
+import os
+
 import requests
 from app.models.checker import Checker
 from app.models.domain import Domain
@@ -6,7 +8,7 @@ from datetime import datetime
 import time
 import smtplib
 
-from config import email_sender, password_sender
+from config import email_sender, password_sender, shop_images_location
 
 
 def check_link_changes(url: str):
@@ -102,3 +104,8 @@ def create_product(file: dict, new_url: str):
     }
 
     return file
+
+
+def load_images():
+    images = os.listdir(shop_images_location)
+    return images
