@@ -26,11 +26,20 @@
         function restoreText(button) {
             button.innerHTML = "NEW PRICE!";
         }
+
+        
     </script>
 </head>
 
 <body>
+    <header>
+        <img src="{{url_for('static', filename='images/price_checker.png')}}" , alt="Logo", height="20px">
+    </header>
     <div class="content-container">
+        <div class="head-container-left">
+            <h1 class="big-heading">Introducing PriceChecker.</h1>
+            <h1 class="big-heading">The only promo hunter you need.</h1>
+        </div>
         <div class="head-container">
             {% with messages = get_flashed_messages() %}
             {% if messages %}
@@ -39,13 +48,6 @@
             {% endfor %}
             {% endif %}
             {% endwith %}
-            <img src="{{url_for('static', filename='images/price_checker.png')}}" , alt="Logo" , width="500px" />
-            <h1>Add new link: </h1>
-            <form method="POST">
-                <label for="url">URL to track:</label>
-                <input type="url" name="url" required>
-                <button type="submit">Add URL</button>
-            </form>
             <h2>Currently supported list of stores:</h2>
             <ul>
                 {% for image in images %}
@@ -53,6 +55,12 @@
                 {% endfor %}
             </ul>
             <hr style="height:2px;border-width:0;color:gray;background-color:gray">
+        </div>
+        <div class="centered-container">
+            <form method="POST">
+                <input type="url" name="url" placeholder="Add link to follow..." required>
+                <button type="submit" class="add-url-button">ADD NEW URL</button>
+            </form>
         </div>
         <div class="links-container">
             <h2>Tracked URLs</h2>
@@ -62,10 +70,12 @@
                     <a href="{{ url }}" target="_blank">{{ url }}</a>
                     <button class="details-button" onclick="toggleDetails('{{ loop.index }}', this)">DETAILS</button>
                     <div class="details" id="{{ loop.index }}">
-                        <ul>Added: {{ data.check_date }}</ul>
-                        <ul>Last check: {% if data.last_check_date %}{{data.last_check_date}}{% endif %}</ul>
-                        <ul>Last price: {% if data.content %}{{data.content}}{% endif %}</ul>
-                        <ul>Checked times: {% if data.counter %}{{data.counter}}{% endif %}</ul>
+                        <ul>
+                        <li>Added: {{ data.check_date }}</li>
+                        <li>Last check: {% if data.last_check_date %}{{data.last_check_date}}{% endif %}</li>
+                        <li>Last price: {% if data.content %}{{data.content}}{% endif %}</li>
+                        <li>Checked times: {% if data.counter %}{{data.counter}}{% endif %}</li>
+                        </ul>
                     </div>
                 </div>
                 <div class="options">
