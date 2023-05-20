@@ -1,101 +1,144 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Link Tracker</title>
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/mainpage.css') }}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Price Tracker</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static',filename='styles/mainpage.css') }}"
+    />
     <script>
-         function toggleDetails(id, button) {
-            var details = document.getElementById(id);
+      function toggleDetails(id, button) {
+        var details = document.getElementById(id);
 
-            if (details.style.maxHeight === "0px" || details.style.maxHeight === "") {
-                details.style.maxHeight = details.scrollHeight + "px";
-                button.innerText = "HIDE";
-            } else {
-                details.style.maxHeight = "0px";
-                button.innerText = "DETAILS";
-            }
+        if (
+          details.style.maxHeight === "0px" ||
+          details.style.maxHeight === ""
+        ) {
+          details.style.maxHeight = details.scrollHeight + "px";
+          button.innerText = "HIDE";
+        } else {
+          details.style.maxHeight = "0px";
+          button.innerText = "DETAILS";
         }
-        function changeText(button) {
-            button.innerHTML = "CLEAR";
-        }
+      }
+      function changeText(button) {
+        button.innerHTML = "CLEAR";
+      }
 
-        function restoreText(button) {
-            button.innerHTML = "NEW PRICE!";
-        }
-
-        
+      function restoreText(button) {
+        button.innerHTML = "NEW PRICE!";
+      }
     </script>
-</head>
+  </head>
 
-<body>
+  <body>
     <header>
-        <img src="{{url_for('static', filename='images/price_checker.png')}}" , alt="Logo", height="20px">
+      <img
+        src="{{url_for('static', filename='images/price_checker.png')}}"
+        ,
+        alt="Logo"
+        ,
+        height="20px"
+      />
     </header>
     <div class="content-container">
-        <div class="head-container-left">
-            <h1 class="big-heading">Introducing PriceChecker.</h1>
-            <h1 class="big-heading">The only promo hunter you need.</h1>
-        </div>
-        <div class="head-container">
-            {% with messages = get_flashed_messages() %}
-            {% if messages %}
-            {% for message in messages %}
-            <script>alert("{{ message }}");</script>
-            {% endfor %}
-            {% endif %}
-            {% endwith %}
-            <h2>Currently supported list of stores:</h2>
-            <ul>
-                {% for image in images %}
-                    <img src="{{ url_for('static', filename='/images/shops/' + image)}}">
-                {% endfor %}
-            </ul>
-            <hr style="height:2px;border-width:0;color:gray;background-color:gray">
-        </div>
-        <div class="centered-container">
-            <form method="POST">
-                <input type="url" name="url" placeholder="Add link to follow..." required>
-                <button type="submit" class="add-url-button">ADD NEW URL</button>
-            </form>
-        </div>
-        <div class="links-container">
-            <h2>Tracked URLs</h2>
-            {% for url, data in tracked_links.items() %}
-            <div class="link-block">
-                <div class="link-info">
-                    <a href="{{ url }}" target="_blank">{{ url }}</a>
-                    <button class="details-button" onclick="toggleDetails('{{ loop.index }}', this)">DETAILS</button>
-                    <div class="details" id="{{ loop.index }}">
-                        <ul>
-                        <li>Added: {{ data.check_date }}</li>
-                        <li>Last check: {% if data.last_check_date %}{{data.last_check_date}}{% endif %}</li>
-                        <li>Last price: {% if data.content %}{{data.content}}{% endif %}</li>
-                        <li>Checked times: {% if data.counter %}{{data.counter}}{% endif %}</li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="options">
-                    {% if data.changed %}
-                    <a href="{{ url_for('clear_on_demand', url=url) }}">
-                        <button class="rounded-background new-price-button" onmouseover="changeText(this)"
-                            onmouseout="restoreText(this)">NEW PRICE!</button>
-                    </a>
-                    {% endif %}
-                    <a href="{{ url_for('delete_product', url=url) }}">
-                        <button class="delete-button">DELETE</button>
-                    </a>
-                    <a href="{{ url_for('check_on_demand', url=url) }}">
-                        <button class="delete-button">CHECK IT NOW</button>
-                    </a>
-                </div>
+      <div class="head-container-left">
+        <h1 class="big-heading">Introducing PriceChecker.</h1>
+        <h1 class="big-heading">The only promo hunter you need.</h1>
+      </div>
+      <div class="head-container">
+        {% with messages = get_flashed_messages() %} {% if messages %} {% for
+        message in messages %}
+        <script>
+          alert("{{ message }}");
+        </script>
+        {% endfor %} {% endif %} {% endwith %}
+        <h2>Currently supported list of stores:</h2>
+        <ul>
+          {% for image in images %}
+          <img
+            src="{{ url_for('static', filename='/images/shops/' + image)}}"
+          />
+          {% endfor %}
+        </ul>
+        <hr
+          style="
+            height: 2px;
+            border-width: 0;
+            color: gray;
+            background-color: gray;
+          "
+        />
+      </div>
+      <div class="centered-container">
+        <form method="POST">
+          <input
+            type="url"
+            name="url"
+            placeholder="Add link to follow..."
+            required
+          />
+          <button type="submit" class="add-url-button">ADD NEW URL</button>
+        </form>
+      </div>
+      <div class="links-container">
+        <h2>Tracked URLs</h2>
+        {% for url, data in tracked_links.items() %}
+        <div class="link-block">
+          <div class="link-info">
+            <a href="{{ url }}" target="_blank">{{ url }}</a>
+            <button
+              class="details-button"
+              onclick="toggleDetails('{{ loop.index }}', this)"
+            >
+              DETAILS
+            </button>
+            <div class="details" id="{{ loop.index }}">
+              <ul>
+                <li>Added: {{ data.check_date }}</li>
+                <li>
+                  Last check: {% if data.last_check_date
+                  %}{{data.last_check_date}}{% endif %}
+                </li>
+                <li>
+                  Last price: {% if data.content %}{{data.content}}{% endif %}
+                </li>
+                <li>
+                  Checked times: {% if data.counter %}{{data.counter}}{% endif
+                  %}
+                </li>
+              </ul>
             </div>
-            {% endfor %}
+          </div>
+          <div class="options">
+            {% if data.changed %}
+            <a href="{{ url_for('clear_on_demand', url=url) }}">
+              <button
+                class="rounded-background new-price-button"
+                onmouseover="changeText(this)"
+                onmouseout="restoreText(this)"
+              >
+                NEW PRICE!
+              </button>
+            </a>
+            {% endif %}
+            <a href="{{ url_for('delete_product', url=url) }}">
+              <button class="delete-button">DELETE</button>
+            </a>
+            <a href="{{ url_for('check_on_demand', url=url) }}">
+              <button class="delete-button">CHECK IT NOW</button>
+            </a>
+          </div>
         </div>
+        {% endfor %}
+      </div>
     </div>
-</body>
-
+  </body>
 </html>

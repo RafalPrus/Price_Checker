@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Price Tracker</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="{{ url_for('static',filename='styles/mainpage.css') }}"
+    />
+  </head>
+
+  <body>
+    <header>
+      <img
+        src="{{url_for('static', filename='images/price_checker.png')}}"
+        ,
+        alt="Logo"
+        ,
+        height="20px"
+      />
+    </header>
+    <div class="centered-container">
+      <form method="POST">
+        <input
+          type="user_name"
+          name="user_name"
+          placeholder="Name..."
+          required
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Password"
+          required
+        />
+        <button type="submit" class="add-url-button">REGISTER</button>
+      </form>
+    </div>
+  </body>
+</html>

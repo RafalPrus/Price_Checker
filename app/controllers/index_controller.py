@@ -35,3 +35,6 @@ def delete_product_controller(url):
         del tracked_links[url]
         save_data(tracked_links)
     return redirect(url_for("index"))
+
+def register_controller():
+    return render_template("register.html")
