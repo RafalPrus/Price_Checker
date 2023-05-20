@@ -16,6 +16,7 @@ def check_link_changes(url: str):
         domain_to_scrap_symulator = ["wrangler.com", "zalando.pl"]
         for domain, scraper in Domain.DOMAIN_TO_SCRAPER.items():
             if domain in url:
+                # If domain requires scrap simulator
                 if domain in domain_to_scrap_symulator:
                     response = Checker.scrap_symulator(url)
                 else:
@@ -24,7 +25,7 @@ def check_link_changes(url: str):
                 content = scraper(response)
                 return content
             else:
-                return False
+                continue
 
     except Exception as e:
         print(f"Error while checking link {url}: {e}")
@@ -49,6 +50,7 @@ def track_separate_link(url):
     new_content = check_link_changes(url)
     tracking_data[url] = compare_data(url, tracking_data[url], new_content)
     tracking_data[url] = count_loops(tracking_data[url])
+    tracking_data[url]["last_check_date"] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     save_data(tracking_data)
 
 def compare_data(url, data, new_content=None):

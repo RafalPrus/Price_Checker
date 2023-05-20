@@ -59,7 +59,7 @@ input[type=url] {
 .link-block {
     background-color: #191B1D;
     color: #6d6d6d;
-    padding: 15px;
+    padding: 45px;
     margin-bottom: 10px;
     border-radius: 10px;
     display: flex;
@@ -96,6 +96,7 @@ input[type=url] {
 .head-container-left {
     max-width: 1440px;
     margin: 0 auto;
+    margin-top: 70px;
     text-align: left;
 }
 

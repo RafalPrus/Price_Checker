@@ -15,7 +15,7 @@ def index_controller():
                 save_data(updated_links)
                 return redirect(url_for("index"))
             else:
-                flash("Niedozwolona nazwa, wybierz inną!")
+                flash("We are sorry, this store is not supported.")
                 return render_template("index.html", tracked_links=tracked_links)
     return render_template("index.html", tracked_links=tracked_links, images=images)
 
