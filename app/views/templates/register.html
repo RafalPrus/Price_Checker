@@ -16,14 +16,22 @@
   </head>
 
   <body>
-    <header>
-      <img
-        src="{{url_for('static', filename='images/price_checker.png')}}"
-        ,
-        alt="Logo"
-        ,
-        height="20px"
-      />
+    <header class="header-container">
+      <div>
+        <a href="{{ url_for('index') }}">
+          <img
+            src="{{url_for('static', filename='images/price_checker.png')}}"
+            ,
+            alt="Logo"
+            ,
+            height="20px"
+          />
+        </a>
+      </div>
+      <div>
+        <a href="{{ url_for('register') }}">Sign up</a>
+        <a href="link2">Register</a>
+      </div>
     </header>
     <div class="centered-container">
       <form method="POST">
