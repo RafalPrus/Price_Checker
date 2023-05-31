@@ -2,6 +2,7 @@ from flask import request, url_for, redirect, flash, render_template
 from app.models.domain import Domain
 from app.models.repositories.repositories import load_data, save_data
 from app.models.utils import create_product, track_separate_link, clear_changed_status, load_images
+from werkzeug.security import generate_password_hash
 
 
 def index_controller():
@@ -37,4 +38,9 @@ def delete_product_controller(url):
     return redirect(url_for("index"))
 
 def register_controller():
-    return render_template("register.html")
+    if request.method == 'GET':
+        return render_template("register.html")
+    elif request.method == 'POST':
+        user_name = request.form['user_name']
+        password = generate_password_hash(request.form['password'])
+        return user_name

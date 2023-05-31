@@ -31,7 +31,7 @@ def check_on_demand(url):
 def clear_on_demand(url):
     return clear_on_demand_controller(url)
 
-@app.route("/register")
+@app.route("/register", methods=["GET", "POST"])
 def register():
     return register_controller()
 
